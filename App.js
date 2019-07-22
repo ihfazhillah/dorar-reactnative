@@ -2,21 +2,21 @@ import React, {useState} from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import { TextInput } from 'react-native-gesture-handler';
+import DetailResult from './DetailResult';
 
 
-function App() {
+function App({navigation}) {
   const [value, setValue] = useState(null)
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>Dorar.net</Text>
-      <Text>{value}</Text>
       <TextInput
       style={{height: 50}}
       placeholder="اكتب الحديث"
       value={value}
       onChangeText={(text) => {setValue(text)}}
       />
-      <Button title="بحث"></Button>
+      <Button onPress={() => navigation.navigate('Detail', {q: value})} title="بحث"/>
     </View>
   );
 }
@@ -38,6 +38,9 @@ const styles = StyleSheet.create({
 const DorarApp = createStackNavigator({
   Home: {
     screen: App
+  },
+  Detail: {
+    screen: DetailResult
   }
 })
 
