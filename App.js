@@ -44,4 +44,5 @@ const DorarApp = createStackNavigator({
   }
 })
 
+
 export default createAppContainer(DorarApp)

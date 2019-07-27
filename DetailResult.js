@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Text, Button, View, ScrollView} from 'react-native';
+import cheerio from 'cheerio-without-node-native'
 
 
 function DetailResult({navigation}){
@@ -19,8 +20,15 @@ function DetailResult({navigation}){
         return <View><Text>Loading...</Text></View>
     }
 
+    function setData(response){
+        const $ = cheerio.load(response.ahadith.result)
+        data = $('.hadith').contents().map(function(){ return $(this).text()}).get()
+        // console.log(data)
+        return data
+    }
+
     return <ScrollView>
-        <Text>{result.ahadith.result}</Text>
+        {setData(result).map((x)=> <Text>{JSON.stringify(x) + '\n-------'}</Text>)}
     </ScrollView>
 }
 
