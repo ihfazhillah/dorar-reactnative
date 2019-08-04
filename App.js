@@ -5,6 +5,8 @@ import { TextInput } from 'react-native-gesture-handler';
 import DetailResult from './DetailResult';
 
 
+
+
 function App({navigation}) {
   const [value, setValue] = useState(null)
   return (
