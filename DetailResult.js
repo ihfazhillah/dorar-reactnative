@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Text, Button, TouchableOpacity, View, ScrollView, FlatList} from 'react-native';
+import {Share, Text, Button, TouchableOpacity, View, ScrollView, FlatList} from 'react-native';
 import cheerio from 'cheerio-without-node-native'
 import _ from 'lodash'
 
@@ -29,6 +29,19 @@ function DetailResult({navigation}) {
         return _.zip(data, info)
     }
 
+    async function onShare(hadith, info){
+        try{
+            const result = await Share.share({
+                message: hadith + '\n' + info,
+                dialogTitle: 'Share hadits',
+            })
+
+            alert(result.activityType)
+        } catch (error){
+            alert(error.message)
+        }
+    }
+
     function _renderItem({item}) {
         return (<TouchableOpacity>
             <View>
@@ -40,6 +53,7 @@ function DetailResult({navigation}) {
                 </Text>
 
             </View>
+            <Button onPress={e => {onShare(item[0], item[1])}} title={'Share'} />
         </TouchableOpacity>
         )
     }
