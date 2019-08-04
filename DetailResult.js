@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Text, Button, TouchableOpacity, View, ScrollView, FlatList} from 'react-native';
 import cheerio from 'cheerio-without-node-native'
+import _ from 'lodash'
 
 
 function DetailResult({navigation}) {
@@ -23,14 +24,30 @@ function DetailResult({navigation}) {
     function setData(response) {
         const $ = cheerio.load(response.ahadith.result)
         data = $('.hadith').map(function () {return $(this).text()}).get()
+        info = $('.hadith-info').map(function () {return $(this).text()}).get()
         // console.log(data)
-        return data
+        return _.zip(data, info)
+    }
+
+    function _renderItem({item}) {
+        return (<TouchableOpacity>
+            <View>
+                <Text style={{fontSize: 20, padding: 10, paddingBottom: 5, marginEnd: 5}}>
+                    {item[0]}
+                </Text>
+                <Text style={{fontSize: 15, paddingTop: 0, paddingEnd: 10}}>
+                    {item[1]}
+                </Text>
+
+            </View>
+        </TouchableOpacity>
+        )
     }
 
     return <ScrollView>
         <FlatList
             data={setData(result)}
-            renderItem={({item}) => <TouchableOpacity><View style={{padding: 10, margin: 5}}><Text style={{fontSize: 20, padding: 10}}>{item}</Text></View></TouchableOpacity>}
+            renderItem={_renderItem}
             keyExtractor={(item, index) => item + index}
         />
     </ScrollView>
