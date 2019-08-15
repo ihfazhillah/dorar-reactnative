@@ -48,7 +48,7 @@ class DetailResult extends React.Component {
             return _.zip(data, info)
         }
 
-        async function onShare(hadith, info) {
+        const onShare = async (hadith, info) => {
             // try {
             //     const result = await Share.share({
             //         message: hadith + '\n' + info,
@@ -63,8 +63,8 @@ class DetailResult extends React.Component {
             try {
                 const result = await Share.open({
                     message: hadith + '\n' + info,
-                    title: 'hello world',
-                    url: this.base_url + this.props.navigation.getParam('q')
+                    title: 'dorar.net',
+                    url: "https://dorar.net/hadith/search?q=" + this.props.navigation.getParam('q')
                 })
             } catch (error) {
                 console.log(error.message)
