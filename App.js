@@ -1,26 +1,45 @@
 import React, {useState} from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Button, StyleSheet, Text, View, TextInput } from 'react-native';
 import { createStackNavigator, createAppContainer } from "react-navigation";
-import { TextInput } from 'react-native-gesture-handler';
 import DetailResult from './DetailResult';
+import ShareMenu from 'react-native-share-menu';
 
 
+class App extends React.Component {
+    constructor(props){
+        super(props)
 
+        this.state = {
+            value : ''
+        }
 
-function App({navigation}) {
-  const [value, setValue] = useState(null)
-  return (
-    <View style={styles.container}>
-      <Text style={styles.headerText}>Dorar.net</Text>
-      <TextInput
-      style={{height: 50}}
-      placeholder="اكتب الحديث"
-      value={value}
-      onChangeText={(text) => {setValue(text)}}
-      />
-      <Button onPress={() => navigation.navigate('Detail', {q: value})} title="بحث"/>
-    </View>
-  );
+    }
+
+    componentWillMount(){
+        const { navigation } = this.props
+        ShareMenu.getSharedText((text) => {
+            this.setState({value: text})
+            navigation.navigate('Detail', {q: text})
+        })
+
+    }
+
+    render() {
+        const { navigation } = this.props
+        const {value} = this.state
+        return (
+            <View style={styles.container}>
+                <Text style={styles.headerText}>Dorar.net</Text>
+                <TextInput
+                    style={{height: 50}}
+                    placeholder="اكتب الحديث"
+                    value={value}
+                    onChangeText={(text) => {this.setState({value:text})}}
+                />
+                <Button onPress={() => navigation.navigate('Detail', {q: value})} title="بحث" />
+            </View>
+        );
+    }
 }
 
 const styles = StyleSheet.create({

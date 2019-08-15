@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import {Share, Text, Button, TouchableOpacity, View, ScrollView, FlatList} from 'react-native';
+import {Text, Button, TouchableOpacity, View, ScrollView, FlatList} from 'react-native';
 import cheerio from 'cheerio-without-node-native'
 import _ from 'lodash'
+import Share from 'react-native-share';
 
 
 function DetailResult({navigation}) {
@@ -29,14 +30,23 @@ function DetailResult({navigation}) {
         return _.zip(data, info)
     }
 
-    async function onShare(hadith, info){
-        try{
-            const result = await Share.share({
-                message: hadith + '\n' + info,
-                dialogTitle: 'Share hadits',
-            })
+    async function onShare(hadith, info) {
+        // try {
+        //     const result = await Share.share({
+        //         message: hadith + '\n' + info,
+        //         dialogTitle: 'Share hadits',
+        //     })
 
-            alert(result.activityType)
+        //     alert(result.activityType)
+        // } catch (error) {
+        //     alert(error.message)
+        // }
+
+        try {
+            const result = await Share.open({
+                message: hadith + '\n' + info,
+                title: 'hello world'
+            })
         } catch (error){
             alert(error.message)
         }
