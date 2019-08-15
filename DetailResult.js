@@ -28,6 +28,7 @@ class DetailResult extends React.Component {
     componentWillMount(){
         ShareMenu.getSharedText((text) => {
             this.props.navigation.navigate('Detail', {q: text})
+            ShareMenu.clearSharedText()
         })
     }
 

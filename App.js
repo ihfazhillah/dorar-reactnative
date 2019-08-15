@@ -18,10 +18,22 @@ class App extends React.Component {
     componentWillMount(){
         const { navigation } = this.props
         ShareMenu.getSharedText((text) => {
-            this.setState({value: text})
-            navigation.navigate('Detail', {q: text})
+            if(text){
+                navigation.navigate('Detail', {q: text})
+                ShareMenu.clearSharedText()
+            }
         })
 
+    }
+
+    componentDidMount(){
+        const { navigation } = this.props
+        ShareMenu.getSharedText((text) => {
+            if(text){
+                navigation.navigate('Detail', {q: text})
+                ShareMenu.clearSharedText()
+            }
+        })
     }
 
     render() {
