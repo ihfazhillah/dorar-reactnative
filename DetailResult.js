@@ -65,7 +65,7 @@ class DetailResult extends React.Component {
                 const result = await Share.open({
                     message: hadith + '\n' + info,
                     title: 'dorar.net',
-                    url: "https://dorar.net/hadith/search?q=" + this.props.navigation.getParam('q')
+                    url: "https://dorar.net/hadith/search?q=" + this.props.navigation.getParam('q').split(" ").join("+")
                 })
             } catch (error) {
                 console.log(error.message)
