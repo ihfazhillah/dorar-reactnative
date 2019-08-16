@@ -43,7 +43,7 @@ class DetailResult extends React.Component {
 
         function setData(response) {
             const $ = cheerio.load(response.ahadith.result)
-            data = $('.hadith').map(function () {return $(this).text()}).get()
+            data = $('.hadith').toArray().map(function(item){return $(item)})
             info = $('.hadith-info').map(function () {return $(this).text()}).get()
             // console.log(data)
             return _.zip(data, info)
@@ -72,18 +72,33 @@ class DetailResult extends React.Component {
             }
         }
 
+        function renderHadith(item){
+            const $ = cheerio.load("")
+            const result = []
+            item.contents().each((index, element)=>{
+                if ($(element).attr('class') === 'search-keys') {
+                    result.push({text: $(element).text(), highlight: true})
+                } else {
+                    result.push({text: $(element).text(), highlight: false})
+                }
+            })
+            return <Text>
+                {result.map((text, index) => (<Text key={index + 'result'} style={{backgroundColor: text.highlight ? "yellow" : "white"}}>{text.text}</Text>))}
+            </Text>
+        }
+
         function _renderItem({item}) {
             return (<TouchableOpacity>
                 <View>
                     <Text style={{fontSize: 20, padding: 10, paddingBottom: 5, marginEnd: 5}}>
-                        {item[0]}
+                        {renderHadith(item[0])}
                     </Text>
                     <Text style={{fontSize: 15, paddingTop: 0, paddingEnd: 10}}>
                         {item[1]}
                     </Text>
 
                 </View>
-                <Button onPress={e => {onShare(item[0], item[1])}} title={'Share'} />
+                <Button onPress={e => {onShare(item[0].text(), item[1])}} title={'Share'} />
             </TouchableOpacity>
             )
         }
