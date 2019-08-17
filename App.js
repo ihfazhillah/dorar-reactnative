@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
-import { Button, StyleSheet, Text, View, TextInput } from 'react-native';
+import { Button, StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import DetailResult from './DetailResult';
 import ShareMenu from 'react-native-share-menu';
+import Voice from 'react-native-voice';
 
 
 class App extends React.Component {
@@ -10,9 +11,17 @@ class App extends React.Component {
         super(props)
 
         this.state = {
-            value : ''
+            value : '',
+            stt: [],
         }
 
+        Voice.onSpeechResults = this.onSpeechResult
+        Voice.onSpeechError = (e) => {alert(JSON.stringify(e.error))}
+
+    }
+
+    componentWillUnmount(){
+        Voice.destroy().then(Voice.removeAllListeners)
     }
 
     componentWillMount(){
@@ -36,6 +45,19 @@ class App extends React.Component {
         })
     }
 
+    _startRecognizing = async () => {
+        try {
+            Voice.start('ar-SA')
+        } catch (e){
+            alert(e)
+        }
+    }
+
+    onSpeechResult = (e) => {
+        this.setState({stt: e.value})
+        this.props.navigation.navigate('Detail', {q: e.value[0]})
+    }
+
     render() {
         const { navigation } = this.props
         const {value} = this.state
@@ -50,8 +72,11 @@ class App extends React.Component {
                         onChangeText={(text) => {this.setState({value:text})}}
                         onSubmitEditing={() => navigation.navigate('Detail', {q: value})}
                         style={{fontSize:24}}
-                    />
+            />
                 </View>
+            <Button onPress={this._startRecognizing} title="Audio Search"/>
+            <Text>Result</Text>
+            <Text>{JSON.stringify(this.state.stt)}</Text>
             </View>
         );
     }
