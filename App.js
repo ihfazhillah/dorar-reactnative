@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Button, StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { Button, Image, StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import DetailResult from './DetailResult';
 import ShareMenu from 'react-native-share-menu';
@@ -13,10 +13,12 @@ class App extends React.Component {
         this.state = {
             value : '',
             stt: [],
+            partialResults: [''],
         }
 
         Voice.onSpeechResults = this.onSpeechResult
         Voice.onSpeechError = (e) => {alert(JSON.stringify(e.error))}
+        Voice.onSpeechPartialResults = this.onPartialResult
 
     }
 
@@ -58,25 +60,34 @@ class App extends React.Component {
         this.props.navigation.navigate('Detail', {q: e.value[0]})
     }
 
+    onPartialResult = (e) => {
+        this.setState({partialResults: e.value})
+    }
+
     render() {
         const { navigation } = this.props
         const {value} = this.state
         return (
             <View style={styles.container}>
+
                 <Text style={styles.headerText}>الدرر السنية</Text>
                 <View style={styles.inputContainer}>
-                    <TextInput
-                        style={{height: 50, margin: 5}}
-                        placeholder="البحث في الموسوعة"
-                        value={value}
-                        onChangeText={(text) => {this.setState({value:text})}}
-                        onSubmitEditing={() => navigation.navigate('Detail', {q: value})}
-                        style={{fontSize:24}}
-            />
+                    <View style={{height: 50}}>
+                        <TouchableOpacity onPress={this._startRecognizing}>
+                            <Image source={require('./microphone.png')} style={{height: 30, width: 30}} />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{height: 50}}>
+                        <TextInput
+                            style={{height: 50, fontSize: 15}}
+                            placeholder="البحث في الموسوعة"
+                            value={value}
+                            onChangeText={(text) => {this.setState({value: text})}}
+                            onSubmitEditing={() => navigation.navigate('Detail', {q: value})}
+                        />
+                    </View>
                 </View>
-            <Button onPress={this._startRecognizing} title="Audio Search"/>
-            <Text>Result</Text>
-            <Text>{JSON.stringify(this.state.stt)}</Text>
+            <Text style={{fontSize:15, margin: 10, alignSelf: 'stretch'}}>{this.state.partialResults[0]}</Text>
             </View>
         );
     }
@@ -84,22 +95,25 @@ class App extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
         fontSize: 20,
         paddingBottom: 30,
+        flex:1,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     headerText: {
         fontSize: 35,
         fontWeight: "600"
     },
     inputContainer: {
-        height: 50,
-        borderStyle: 'solid',
-        borderWidth: 0.75,
-        borderRadius: 25,
+        flexShrink:0,
+        flexGrow:0,
+        flexDirection: 'row',
+        borderBottomWidth: 1,
+        alignSelf: 'stretch',
+        marginLeft: 10,
+        marginRight: 10
     }
 });
 
