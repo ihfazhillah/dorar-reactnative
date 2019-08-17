@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Text, Button, TouchableOpacity, View, ScrollView, FlatList} from 'react-native';
+import {Text, ActivityIndicator, Button, TouchableOpacity, View, ScrollView, FlatList} from 'react-native';
 import cheerio from 'cheerio-without-node-native'
 import _ from 'lodash'
 import Share from 'react-native-share';
@@ -38,7 +38,7 @@ class DetailResult extends React.Component {
 
     render(){
         if (!this.state.result) {
-            return <View><Text>Loading...</Text></View>
+            return <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}><ActivityIndicator size="large"/></View>
         }
 
         function setData(response) {
