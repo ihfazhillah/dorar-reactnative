@@ -70,6 +70,7 @@ class App extends React.Component {
         return (
             <View style={styles.container}>
 
+                <Image source={require('./dorar.png')} style={{height: 100, width: 100}} />
                 <Text style={styles.headerText}>الدرر السنية</Text>
                 <View style={styles.inputContainer}>
                     <View style={{height: 50}}>
@@ -87,7 +88,7 @@ class App extends React.Component {
                         />
                     </View>
                 </View>
-            <Text style={{fontSize:15, margin: 10, alignSelf: 'stretch'}}>{this.state.partialResults[0]}</Text>
+                <Text style={{fontSize: 15, margin: 10, alignSelf: 'stretch'}}>{this.state.partialResults[0]}</Text>
             </View>
         );
     }
