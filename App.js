@@ -118,6 +118,10 @@ const styles = StyleSheet.create({
     }
 });
 
+App.navigationOptions = {
+    title: 'Dorar Hadith Search'
+}
+
 const DorarApp = createStackNavigator({
   Home: {
     screen: App
