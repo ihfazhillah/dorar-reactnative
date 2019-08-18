@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { Button, Image, StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import DetailResult from './DetailResult';
+import About from './About';
 import ShareMenu from 'react-native-share-menu';
 import Voice from 'react-native-voice';
 
@@ -118,9 +119,14 @@ const styles = StyleSheet.create({
     }
 });
 
-App.navigationOptions = {
-    title: 'Dorar Hadith Search'
-}
+App.navigationOptions = ({navigation}) => ( {
+    title: 'Dorar Hadith Search',
+    headerRight:  (
+        <TouchableOpacity onPress={() => {navigation.navigate('About')}}>
+            <Image source={require('./info.png')} style={{marginRight: 15, height: 30, width: 30}} />
+        </TouchableOpacity>
+    )
+})
 
 const DorarApp = createStackNavigator({
   Home: {
@@ -128,7 +134,10 @@ const DorarApp = createStackNavigator({
   },
   Detail: {
     screen: DetailResult
-  }
+  },
+    About:{
+        screen: About
+    }
 })
 
 
